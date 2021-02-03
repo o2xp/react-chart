@@ -19,12 +19,12 @@ const Load = ({ favoritesChartsData, handleLoad, handleDelete }) => {
   }, [favoritesChartsData]);
 
   return (
-    <TableContainer component={Paper}>
-      <Table aria-label="simple table" size="small">
+    <TableContainer component={Paper} style={{ maxHeight: "400px" }}>
+      <Table stickyHeader size="small">
         <TableHead>
           <TableRow>
             <TableCell>Name</TableCell>
-            <TableCell align="right">Action</TableCell>
+            <TableCell align="right">Actions</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -33,12 +33,12 @@ const Load = ({ favoritesChartsData, handleLoad, handleDelete }) => {
               <TableCell component="th" scope="row">
                 {name}
               </TableCell>
-              <TableCell align="right">
-                <IconButton color="primary" onClick={() => handleLoad({ name })}>
+              <TableCell align="right" onClick={() => handleLoad({ name })}>
+                <IconButton color="primary">
                   <Publish />
                 </IconButton>
-                <IconButton color="secondary">
-                  <Delete onClick={() => handleDelete({ name })} />
+                <IconButton color="secondary" onClick={() => handleDelete({ name })}>
+                  <Delete />
                 </IconButton>
               </TableCell>
             </TableRow>

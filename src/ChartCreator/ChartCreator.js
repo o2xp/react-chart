@@ -25,24 +25,14 @@ import "./style/index.css";
 const localStorageName = "@o2xp/react-chart";
 const uniqDatasetChart = ["doughnut", "pie", "polarArea"];
 const disableZoomChart = ["doughnut", "pie", "polarArea", "radar"];
-const firstId = uuidv4();
-const secondId = uuidv4();
 const defaultDatasets = [
   {
-    id: firstId,
+    id: uuidv4(),
     displayLabel: true,
-    ordinate: "score",
-    label: "Prod score",
+    ordinate: "",
+    label: "",
     backgroundColor: rgbaColors[0],
     borderColor: hexColors[0]
-  },
-  {
-    id: secondId,
-    displayLabel: true,
-    ordinate: "adtvAmnt",
-    label: "Prod score",
-    backgroundColor: rgbaColors[1],
-    borderColor: hexColors[1]
   }
 ];
 const defaultTitle = "Default Title";
@@ -52,10 +42,12 @@ const defaultData = {
   labels: [],
   series: []
 };
-const defaultOrderByColumn = {
-  value: "",
-  label: "None"
-};
+const defaultOrderByColumns = [
+  {
+    value: "",
+    label: "None"
+  }
+];
 
 const defaultOrderBy = {
   columnId: "",
@@ -67,13 +59,13 @@ const handlePrint = () => {
 };
 
 const ChartCreator = ({ open, setOpen, columns, rows }) => {
-  const [chart, setChart] = useState("line");
+  const [chart, setChart] = useState("");
   const [title, setTitle] = useState(defaultTitle);
   const [showChart, setShowChart] = useState(false);
   const [fullScreen, setFullScreen] = useState(false);
   const [data, setData] = useState(defaultData);
   const [datasets, setDatasets] = useState(cloneDeep(defaultDatasets));
-  const [absciss, setAbsciss] = useState("finSecCatId");
+  const [absciss, setAbsciss] = useState("");
   const [abscissType, setAbscissType] = useState(null);
   const [chartRef, setChartRef] = useState(null);
   const [resetZoomDisabled, setResetZoomDisabled] = useState(true);
@@ -82,7 +74,7 @@ const ChartCreator = ({ open, setOpen, columns, rows }) => {
 
   // Data Selector options
   // Order by
-  const [orderByColumns, setOrderByColumns] = useState([defaultOrderByColumn]);
+  const [orderByColumns, setOrderByColumns] = useState(cloneDeep(defaultOrderByColumns));
   const [orderBy, setOrderBy] = useState(defaultOrderBy);
   // Aggregate
   const [aggregateOperation, setAggregateOperation] = useState("");
@@ -123,7 +115,7 @@ const ChartCreator = ({ open, setOpen, columns, rows }) => {
   }, [datasets]);
 
   useEffect(() => {
-    const newOrderByColumns = [defaultOrderByColumn];
+    const newOrderByColumns = cloneDeep(defaultOrderByColumns);
 
     if (absciss !== "") {
       const { label } = columns.find((col) => col.id === absciss);
@@ -170,11 +162,18 @@ const ChartCreator = ({ open, setOpen, columns, rows }) => {
 
   const handleReset = () => {
     setChart("");
-    setTitle(defaultTitle);
     setShowChart(false);
+    setTitle(defaultTitle);
     setData(defaultData);
     setDatasets(cloneDeep(defaultDatasets));
     setAbsciss("");
+    setOrderByColumns(cloneDeep(defaultOrderByColumns));
+    setOrderBy(defaultOrderBy);
+    setAggregateOperation("");
+    setAxesStartingAtZero({
+      x: true,
+      y: true
+    });
   };
 
   const handleResetZoom = () => {
@@ -267,7 +266,6 @@ const ChartCreator = ({ open, setOpen, columns, rows }) => {
       (savedChart) => savedChart.name !== name
     );
 
-    console.log(newFavoritesCharts);
     setFavoritesCharts(newFavoritesCharts);
     localStorage.setItem(localStorageName, JSON.stringify(newFavoritesCharts));
   };
@@ -419,17 +417,12 @@ const ChartCreator = ({ open, setOpen, columns, rows }) => {
             </Grid>
           </Grid>
           <Grid container style={{ padding: "16px 24px" }}>
-            <Grid item xs={12}>
-              <Typography variant="h6">Favorite Charts</Typography>
-            </Grid>
-            <Grid container item xs={12} justify="space-between" alignItems="flex-end">
-              <FavoriteCharts
-                handleSave={handleSave}
-                handleLoad={handleLoad}
-                handleDelete={handleDelete}
-                favoritesChartsData={favoritesChartsData}
-              />
-            </Grid>
+            <FavoriteCharts
+              handleSave={handleSave}
+              handleLoad={handleLoad}
+              handleDelete={handleDelete}
+              favoritesChartsData={favoritesChartsData}
+            />
           </Grid>
         </>
       )}
