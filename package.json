@@ -33,7 +33,7 @@
     "@babel/preset-env": "^7.12.11",
     "@babel/preset-react": "^7.12.10",
     "@material-ui/icons": "^4.11.2",
-    "@o2xp/react-datatable": "^1.1.63",
+    "@o2xp/react-datatable": "^1.1.64",
     "@rollup/plugin-babel": "^5.2.3",
     "@rollup/plugin-commonjs": "^17.1.0",
     "@rollup/plugin-node-resolve": "^11.1.1",

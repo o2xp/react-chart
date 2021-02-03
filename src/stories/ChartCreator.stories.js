@@ -93,32 +93,9 @@ const dates = [
 ];
 
 const ChartCreatorStory = () => {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [datatableOptions, setDatatableOptions] = useState(defaultOptions);
-
-  const test = () => {
-    const res = {};
-    let sortedArray = dates.sort((a, b) => {
-      return new Date(a) - new Date(b);
-    });
-
-    while (sortedArray.length > 0) {
-      const firstDate = sortedArray[0];
-      const start = moment(firstDate);
-      const interval = "days";
-      const count = 355;
-      const end = moment(start).add(count, interval);
-      res[firstDate] = [];
-      sortedArray.forEach((date) => {
-        if (moment(date).isSameOrAfter(start) && moment(date).isSameOrBefore(end)) {
-          res[firstDate].push(date);
-          sortedArray = sortedArray.filter((sa) => !moment(sa).isSame(date));
-        }
-      });
-    }
-
-    // console.log(res);
-  };
+  const [rowsForChart, setRowsForChart] = useState(datatableOptions.data.rows);
 
   useEffect(() => {
     setDatatableOptions({
@@ -134,18 +111,20 @@ const ChartCreatorStory = () => {
         ]
       }
     });
-    test();
   }, []);
+
+  const actions = ({ type, payload }) => {
+    if (type === "select" && payload.length > 0) {
+      setRowsForChart(payload);
+    } else {
+      setRowsForChart(datatableOptions.data.rows);
+    }
+  };
 
   return (
     <div>
-      <Datatable options={datatableOptions} stripped />
-      <ChartCreator
-        open={open}
-        setOpen={setOpen}
-        rows={datatableOptions.data.rows}
-        columns={columns}
-      />
+      <Datatable options={datatableOptions} actions={actions} stripped />
+      <ChartCreator open={open} setOpen={setOpen} rows={rowsForChart} columns={columns} />
     </div>
   );
 };

@@ -117,28 +117,34 @@ const ChartCreator = ({ open, setOpen, columns, rows }) => {
   useEffect(() => {
     const newOrderByColumns = cloneDeep(defaultOrderByColumns);
 
-    if (absciss !== "") {
-      const { label } = columns.find((col) => col.id === absciss);
+    if (absciss !== "" && columns.length > 0) {
+      const col = columns.find((column) => column.id === absciss);
+      if (col != null) {
+        const { label } = col;
 
-      setOrderBy({
-        columnId: absciss,
-        order: "asc"
-      });
+        setOrderBy({
+          columnId: absciss,
+          order: "asc"
+        });
 
-      newOrderByColumns.push({
-        value: absciss,
-        label
-      });
+        newOrderByColumns.push({
+          value: absciss,
+          label
+        });
+      }
     }
 
     datasets.forEach(({ ordinate }) => {
-      if (ordinate !== "") {
-        const { id, label } = columns.find((col) => col.id === ordinate);
-        const col = {
-          value: id,
-          label
-        };
-        newOrderByColumns.push(col);
+      if (ordinate !== "" && columns.length > 0) {
+        const col = columns.find((column) => column.id === ordinate);
+        if (col != null) {
+          const { id, label } = col;
+          const newCol = {
+            value: id,
+            label
+          };
+          newOrderByColumns.push(newCol);
+        }
       }
     });
 
@@ -147,8 +153,11 @@ const ChartCreator = ({ open, setOpen, columns, rows }) => {
 
   useEffect(() => {
     if (absciss !== "" && columns.length > 0) {
-      const { dataType } = columns.find(({ id }) => id === absciss);
-      setAbscissType(dataType);
+      const col = columns.find((column) => column.id === absciss);
+      if (col != null) {
+        const { dataType } = col;
+        setAbscissType(dataType);
+      }
     }
   }, [absciss]);
 
@@ -191,16 +200,22 @@ const ChartCreator = ({ open, setOpen, columns, rows }) => {
   };
 
   const handleCreate = () => {
+    const abscissCol = columns.find((column) => column.id === absciss);
+    const abscissLabel = abscissCol ? abscissCol.label : "";
     const newData = {
       abscissId: absciss,
-      abscissLabel: columns.find((col) => col.id === absciss).label,
+      abscissLabel,
       ordinateLabels: [],
       rows: [],
       datasets
     };
 
     datasets.forEach(({ ordinate }) => {
-      newData.ordinateLabels.push(columns.find((col) => col.id === ordinate).label);
+      const ordinateCol = columns.find((col) => col.id === ordinate);
+      if (ordinateCol) {
+        const { label: ordinateLabel } = ordinateCol;
+        newData.ordinateLabels.push(ordinateLabel);
+      }
     });
 
     newData.rows = rows.map((row) => {
