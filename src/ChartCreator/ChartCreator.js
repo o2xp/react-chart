@@ -1,11 +1,19 @@
 // @flow
 import React, { useState, useEffect } from "react";
 import cloneDeep from "lodash/cloneDeep";
+import {
+  createMuiTheme,
+  ThemeProvider,
+  StylesProvider,
+  createGenerateClassName
+} from "@material-ui/core/styles";
+
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
@@ -21,6 +29,10 @@ import Options from "./Options";
 import FavoriteCharts from "./FavoriteCharts";
 import { hexColors, rgbaColors } from "./utils/colors";
 import "./style/index.css";
+
+const generateClassName = createGenerateClassName({
+  disableGlobal: true
+});
 
 const localStorageName = "@o2xp/react-chart";
 const uniqDatasetChart = ["doughnut", "pie", "polarArea"];
@@ -58,7 +70,7 @@ const handlePrint = () => {
   window.print();
 };
 
-const ChartCreator = ({ open, setOpen, columns, rows }) => {
+const ChartCreator = ({ open, setOpen, columns, rows, theme = {} }) => {
   const [chart, setChart] = useState("");
   const [title, setTitle] = useState(defaultTitle);
   const [showChart, setShowChart] = useState(false);
@@ -315,198 +327,198 @@ const ChartCreator = ({ open, setOpen, columns, rows }) => {
       }
     }
   };
+
   return (
-    <Dialog
-      fullWidth
-      fullScreen={fullScreen}
-      maxWidth="lg"
-      open={open}
-      onClose={handleClose}
-    >
-      <DialogTitle disableTypography style={{ maxHeight: "5%" }}>
-        <Typography variant="h5">{showChart ? title : "Create Chart"}</Typography>
-        <div
-          style={{
-            position: "absolute",
-            right: "8px",
-            top: "8px"
-          }}
-        >
-          <IconButton onClick={handleFullScreen}>
-            {fullScreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
-          </IconButton>
-          <IconButton onClick={handleClose}>
-            <CloseIcon />
-          </IconButton>
-        </div>
-      </DialogTitle>
-      {showChart ? (
-        <Grid container style={{ padding: "16px 24px" }}>
-          <Grid item xs={12}>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={displayLabels}
-                  onChange={handleDisplayLabels}
-                  name="displayLabels"
-                />
-              }
-              label="Display Labels"
-              labelPlacement="start"
-            />
-          </Grid>
-          <Grid
-            item
-            xs={12}
-            style={{
-              position: "relative",
-              minHeight: fullScreen ? "80vh" : "50vh"
-            }}
-          >
-            <Chart
-              data={data}
-              chart={chart}
-              chartRef={chartRef}
-              setChartRef={setChartRef}
-              abscissType={abscissType}
-              aggregateOperation={aggregateOperation}
-              orderBy={orderBy}
-              axesStartingAtZero={axesStartingAtZero}
-            />
-          </Grid>
-        </Grid>
-      ) : (
-        <>
-          <Grid container style={{ padding: "16px 24px" }}>
-            <DataSelector
-              columns={columns}
-              datasets={datasets}
-              setDatasets={setDatasets}
-              absciss={absciss}
-              setAbsciss={setAbsciss}
-            />
-          </Grid>
-          <Grid container style={{ padding: "16px 24px" }}>
-            <ChartSelector
-              datasets={datasets}
-              chart={chart}
-              setChart={setChart}
-              uniqDatasetChart={uniqDatasetChart}
-              abscissType={abscissType}
-            />
-          </Grid>
-          <Grid container style={{ padding: "16px 24px" }}>
-            <Grid item xs={12}>
-              <Typography variant="h6">3. Chart Title</Typography>
-            </Grid>
-            <Grid
-              container
-              item
-              xs={12}
-              justify="space-between"
-              alignItems="flex-end"
-              spacing={4}
+    <StylesProvider generateClassName={generateClassName}>
+      <ThemeProvider theme={createMuiTheme(theme)}>
+        <Paper />
+        <Dialog fullScreen={fullScreen} maxWidth="lg" open={open} onClose={handleClose}>
+          <DialogTitle disableTypography style={{ maxHeight: "5%" }}>
+            <Typography variant="h5">{showChart ? title : "Create Chart"}</Typography>
+            <div
+              style={{
+                position: "absolute",
+                right: "8px",
+                top: "8px"
+              }}
             >
-              <Grid item xs={2}>
-                <TextField fullWidth value={title} onChange={handleTitleChange} />
+              <IconButton onClick={handleFullScreen}>
+                {fullScreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
+              </IconButton>
+              <IconButton onClick={handleClose}>
+                <CloseIcon />
+              </IconButton>
+            </div>
+          </DialogTitle>
+          {showChart ? (
+            <Grid container style={{ padding: "16px 24px" }}>
+              <Grid item xs={12}>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={displayLabels}
+                      onChange={handleDisplayLabels}
+                      name="displayLabels"
+                    />
+                  }
+                  label="Display Labels"
+                  labelPlacement="start"
+                />
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                style={{
+                  position: "relative",
+                  minHeight: fullScreen ? "80vh" : "50vh"
+                }}
+              >
+                <Chart
+                  data={data}
+                  chart={chart}
+                  chartRef={chartRef}
+                  setChartRef={setChartRef}
+                  abscissType={abscissType}
+                  aggregateOperation={aggregateOperation}
+                  orderBy={orderBy}
+                  axesStartingAtZero={axesStartingAtZero}
+                />
+              </Grid>
+            </Grid>
+          ) : (
+            <>
+              <Grid container style={{ padding: "16px 24px" }}>
+                <DataSelector
+                  columns={columns}
+                  datasets={datasets}
+                  setDatasets={setDatasets}
+                  absciss={absciss}
+                  setAbsciss={setAbsciss}
+                />
+              </Grid>
+              <Grid container style={{ padding: "16px 24px" }}>
+                <ChartSelector
+                  datasets={datasets}
+                  chart={chart}
+                  setChart={setChart}
+                  uniqDatasetChart={uniqDatasetChart}
+                  abscissType={abscissType}
+                />
+              </Grid>
+              <Grid container style={{ padding: "16px 24px" }}>
+                <Grid item xs={12}>
+                  <Typography variant="h6">3. Chart Title</Typography>
+                </Grid>
+                <Grid
+                  container
+                  item
+                  xs={12}
+                  justify="space-between"
+                  alignItems="flex-end"
+                  spacing={4}
+                >
+                  <Grid item xs={2}>
+                    <TextField fullWidth value={title} onChange={handleTitleChange} />
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid container style={{ padding: "16px 24px" }}>
+                <Grid item xs={12}>
+                  <Typography variant="h6">4. Options</Typography>
+                </Grid>
+                <Grid
+                  container
+                  item
+                  xs={12}
+                  justify="space-between"
+                  alignItems="flex-end"
+                  spacing={4}
+                >
+                  <Options
+                    orderByColumns={orderByColumns}
+                    orderBy={orderBy}
+                    setOrderBy={setOrderBy}
+                    aggregateOperation={aggregateOperation}
+                    setAggregateOperation={setAggregateOperation}
+                    abscissType={abscissType}
+                    axesStartingAtZero={axesStartingAtZero}
+                    setAxesStartingAtZero={setAxesStartingAtZero}
+                  />
+                </Grid>
+              </Grid>
+              <Grid container style={{ padding: "16px 24px" }}>
+                <FavoriteCharts
+                  handleSave={handleSave}
+                  handleLoad={handleLoad}
+                  handleDelete={handleDelete}
+                  favoritesChartsData={favoritesChartsData}
+                />
+              </Grid>
+            </>
+          )}
+          <Grid
+            container
+            alignItems="flex-end"
+            justify="center"
+            style={{ padding: "16px 24px" }}
+          >
+            <Grid container item xs={12} justify="space-between">
+              <Grid item>
+                <Button
+                  onClick={handleResetZoom}
+                  variant="contained"
+                  className="button-start"
+                  style={{
+                    background: !resetZoomDisabled && "#ff9800",
+                    color: !resetZoomDisabled && "#fff"
+                  }}
+                  disabled={resetZoomDisabled}
+                >
+                  Reset Zoom
+                </Button>
+
+                <Button
+                  onClick={handlePrint}
+                  variant="contained"
+                  className="button-start"
+                  style={{
+                    background: "#795548",
+                    color: "#fff"
+                  }}
+                >
+                  Print
+                </Button>
+              </Grid>
+
+              <Grid item>
+                <Button onClick={handleReset} className="button-end" color="secondary">
+                  Reset
+                </Button>
+
+                <Button
+                  onClick={handleBack}
+                  color="secondary"
+                  disabled={!showChart}
+                  className="button-end"
+                  variant="contained"
+                >
+                  Back
+                </Button>
+                <Button
+                  onClick={handleCreate}
+                  disabled={showChart || createDisabled}
+                  color="primary"
+                  className="button-end"
+                  variant="contained"
+                >
+                  Create
+                </Button>
               </Grid>
             </Grid>
           </Grid>
-          <Grid container style={{ padding: "16px 24px" }}>
-            <Grid item xs={12}>
-              <Typography variant="h6">4. Options</Typography>
-            </Grid>
-            <Grid
-              container
-              item
-              xs={12}
-              justify="space-between"
-              alignItems="flex-end"
-              spacing={4}
-            >
-              <Options
-                orderByColumns={orderByColumns}
-                orderBy={orderBy}
-                setOrderBy={setOrderBy}
-                aggregateOperation={aggregateOperation}
-                setAggregateOperation={setAggregateOperation}
-                abscissType={abscissType}
-                axesStartingAtZero={axesStartingAtZero}
-                setAxesStartingAtZero={setAxesStartingAtZero}
-              />
-            </Grid>
-          </Grid>
-          <Grid container style={{ padding: "16px 24px" }}>
-            <FavoriteCharts
-              handleSave={handleSave}
-              handleLoad={handleLoad}
-              handleDelete={handleDelete}
-              favoritesChartsData={favoritesChartsData}
-            />
-          </Grid>
-        </>
-      )}
-      <Grid
-        container
-        alignItems="flex-end"
-        justify="center"
-        style={{ padding: "16px 24px" }}
-      >
-        <Grid container item xs={12} justify="space-between">
-          <Grid item>
-            <Button
-              onClick={handleResetZoom}
-              variant="contained"
-              className="button-start"
-              style={{
-                background: !resetZoomDisabled && "#ff9800",
-                color: !resetZoomDisabled && "#fff"
-              }}
-              disabled={resetZoomDisabled}
-            >
-              Reset Zoom
-            </Button>
-
-            <Button
-              onClick={handlePrint}
-              variant="contained"
-              className="button-start"
-              style={{
-                background: "#795548",
-                color: "#fff"
-              }}
-            >
-              Print
-            </Button>
-          </Grid>
-
-          <Grid item>
-            <Button onClick={handleReset} className="button-end" color="secondary">
-              Reset
-            </Button>
-
-            <Button
-              onClick={handleBack}
-              color="secondary"
-              disabled={!showChart}
-              className="button-end"
-              variant="contained"
-            >
-              Back
-            </Button>
-            <Button
-              onClick={handleCreate}
-              disabled={showChart || createDisabled}
-              color="primary"
-              className="button-end"
-              variant="contained"
-            >
-              Create
-            </Button>
-          </Grid>
-        </Grid>
-      </Grid>
-    </Dialog>
+        </Dialog>
+      </ThemeProvider>
+    </StylesProvider>
   );
 };
 
