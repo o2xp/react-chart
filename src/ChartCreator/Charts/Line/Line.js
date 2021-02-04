@@ -15,7 +15,15 @@ const Line = ({ data, options, chartRef }) => {
     setDataFormated(formatData({ data, datasetOptions }));
   }, [data, options]);
 
-  return <LineChart redraw ref={chartRef} data={dataFormated} options={options} />;
+  return (
+    <LineChart
+      id="line-chart"
+      redraw
+      ref={chartRef}
+      data={dataFormated}
+      options={options}
+    />
+  );
 };
 
 export default Line;

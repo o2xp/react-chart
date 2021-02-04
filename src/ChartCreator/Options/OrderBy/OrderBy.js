@@ -20,11 +20,6 @@ const buildOperations = ({ orderByColumns }) =>
 const OrderBy = ({ orderByColumns, orderBy, setOrderBy, isTimeType }) => {
   const [columnId, setColumnId] = useState("");
   const [order, setOrder] = useState("asc");
-  const [disabled, setDisabled] = useState(false);
-
-  useEffect(() => {
-    setDisabled(isTimeType);
-  }, [isTimeType]);
 
   useEffect(() => {
     const { columnId: newColumnId, order: newOrder } = orderBy;
@@ -47,7 +42,7 @@ const OrderBy = ({ orderByColumns, orderBy, setOrderBy, isTimeType }) => {
         <Grid item xs={2}>
           <FormControl fullWidth>
             <InputLabel>Column</InputLabel>
-            <Select value={columnId} onChange={handleColumnChange} disabled={disabled}>
+            <Select value={columnId} onChange={handleColumnChange} disabled={isTimeType}>
               {buildOperations({ orderByColumns })}
             </Select>
           </FormControl>
@@ -58,13 +53,13 @@ const OrderBy = ({ orderByColumns, orderBy, setOrderBy, isTimeType }) => {
               value="asc"
               control={<Radio />}
               label="Ascendant"
-              disabled={disabled}
+              disabled={isTimeType}
             />
             <FormControlLabel
               value="desc"
               control={<Radio />}
               label="Descendant"
-              disabled={disabled}
+              disabled={isTimeType}
             />
           </RadioGroup>
         </Grid>

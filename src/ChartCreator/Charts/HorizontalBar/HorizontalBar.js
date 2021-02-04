@@ -12,6 +12,7 @@ const HorizontalBar = ({ data, options, chartRef }) => {
 
   return (
     <HorizontalBarChart
+      id="horizontalBar-chart"
       ref={chartRef}
       redraw
       data={dataFormated}

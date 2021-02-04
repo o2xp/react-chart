@@ -1,7 +1,6 @@
 // @flow
 import React, { useEffect, useState, createRef } from "react";
-import orderByFnc from "lodash/orderBy";
-
+import cloneDeep from "lodash/cloneDeep";
 import "chartjs-plugin-datalabels";
 import "chartjs-plugin-zoom";
 import VerticalBar from "./VerticalBar";
@@ -90,11 +89,10 @@ const median = ({ arr }) => {
 };
 
 const aggregateCalc = ({ rows, id, calc }) => {
-  const res = [...rows];
+  const res = cloneDeep(rows);
   res.forEach((row) => {
     Object.keys(row).forEach((key) => {
       if (key !== id) {
-        // https://stackoverflow.com/questions/588004/is-floating-point-math-broken/51723472#51723472
         row[key] = calc({ arr: row[key] });
       }
     });
@@ -126,7 +124,8 @@ const aggregateRows = ({ rows, id, aggregateOperation }) => {
   });
 
   // Transform indexed object to array
-  let newRows = Object.keys(resIndexed).map((key) => resIndexed[key]);
+  let newRows = Object.values(resIndexed);
+
   switch (aggregateOperation) {
     case "sum":
       newRows = aggregateCalc({ rows: newRows, id, calc: sum });

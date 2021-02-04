@@ -16,7 +16,7 @@ const Pie = ({ data, options, chartRef }) => {
     setDataFormated(formatData({ data, datasetOptions }));
   }, [data]);
 
-  return <PieChart ref={chartRef} data={dataFormated} options={options} />;
+  return <PieChart id="pie-chart" ref={chartRef} data={dataFormated} options={options} />;
 };
 
 export default Pie;

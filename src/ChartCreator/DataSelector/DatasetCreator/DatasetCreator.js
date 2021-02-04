@@ -1,5 +1,6 @@
 // @flow
 import React, { useState, useEffect } from "react";
+import cloneDeep from "lodash/cloneDeep";
 import TextField from "@material-ui/core/TextField";
 import InputLabel from "@material-ui/core/InputLabel";
 import Grid from "@material-ui/core/Grid";
@@ -28,7 +29,7 @@ const DatasetCreator = ({ dataset, datasets, setDatasets, buildMenuItems }) => {
   }, [datasets, index]);
 
   const handleDatasetChange = ({ value, key }) => {
-    const newDataSets = [...datasets];
+    const newDataSets = cloneDeep(datasets);
     newDataSets[index][key] = value;
     setDatasets(newDataSets);
   };

@@ -12,6 +12,7 @@ const VerticalBar = ({ data, options, chartRef }) => {
 
   return (
     <VerticalBarChart
+      id="verticalBar-chart"
       ref={chartRef}
       redraw
       data={dataFormated}

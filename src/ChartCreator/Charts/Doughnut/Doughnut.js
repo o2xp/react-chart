@@ -16,7 +16,14 @@ const Doughnut = ({ data, options, chartRef }) => {
     setDataFormated(formatData({ data, datasetOptions }));
   }, [data]);
 
-  return <DoughnutChart ref={chartRef} data={dataFormated} options={options} />;
+  return (
+    <DoughnutChart
+      id="doughnut-chart"
+      ref={chartRef}
+      data={dataFormated}
+      options={options}
+    />
+  );
 };
 
 export default Doughnut;

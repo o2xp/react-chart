@@ -11,7 +11,13 @@ const Radar = ({ data, options, chartRef }) => {
   }, [data]);
 
   return (
-    <RadarChart ref={chartRef} redraw data={dataFormated} options={options} />
+    <RadarChart
+      id="radar-chart"
+      ref={chartRef}
+      redraw
+      data={dataFormated}
+      options={options}
+    />
   );
 };
 

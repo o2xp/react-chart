@@ -11,7 +11,13 @@ const Scatter = ({ data, options, chartRef }) => {
   }, [data]);
 
   return (
-    <ScatterChart ref={chartRef} redraw data={dataFormated} options={options} />
+    <ScatterChart
+      id="scatter-chart"
+      ref={chartRef}
+      redraw
+      data={dataFormated}
+      options={options}
+    />
   );
 };
 export default Scatter;

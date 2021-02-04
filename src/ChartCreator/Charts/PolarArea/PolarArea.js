@@ -17,7 +17,12 @@ const PolarArea = ({ data, options, chartRef }) => {
   }, [data]);
 
   return (
-    <PolarAreaChart ref={chartRef} data={dataFormated} options={options} />
+    <PolarAreaChart
+      id="polarArea-chart"
+      ref={chartRef}
+      data={dataFormated}
+      options={options}
+    />
   );
 };
 

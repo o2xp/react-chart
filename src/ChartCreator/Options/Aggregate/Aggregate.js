@@ -38,7 +38,7 @@ const Aggregate = ({ aggregateOperation, setAggregateOperation, isTimeType }) =>
 
   useEffect(() => {
     setDisabled(isTimeType);
-    if (aggregateOperation !== "" && isTimeType) {
+    if (isTimeType && !!aggregateOperation) {
       setAggregateOperation("");
     }
   }, [isTimeType]);
