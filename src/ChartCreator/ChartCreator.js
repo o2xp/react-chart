@@ -88,7 +88,10 @@ const ChartCreator = ({ open, setOpen, columns, rows }) => {
   const [favoritesChartsData, setFavoritesCharts] = useState([]);
 
   useEffect(() => {
-    setFavoritesCharts(JSON.parse(localStorage.getItem(localStorageName)));
+    const savedCharts = JSON.parse(localStorage.getItem(localStorageName));
+    if (savedCharts) {
+      setFavoritesCharts(savedCharts);
+    }
   }, []);
 
   useEffect(() => {
@@ -287,27 +290,29 @@ const ChartCreator = ({ open, setOpen, columns, rows }) => {
 
   const handleLoad = ({ name }) => {
     const savedCharts = JSON.parse(localStorage.getItem(localStorageName));
-    const chartToLoad = savedCharts.find((savedChart) => savedChart.name === name);
-    if (chartToLoad) {
-      const {
-        chart: loadChart,
-        title: loadTitle,
-        data: loadData,
-        datasets: loadDatasets,
-        absciss: loadAbsciss,
-        orderBy: loadOrderBy,
-        aggregateOperation: loadAggregateOperation,
-        axesStartingAtZero: loadAxesStartingAtZero
-      } = chartToLoad.data;
+    if (savedCharts) {
+      const chartToLoad = savedCharts.find((savedChart) => savedChart.name === name);
+      if (chartToLoad) {
+        const {
+          chart: loadChart,
+          title: loadTitle,
+          data: loadData,
+          datasets: loadDatasets,
+          absciss: loadAbsciss,
+          orderBy: loadOrderBy,
+          aggregateOperation: loadAggregateOperation,
+          axesStartingAtZero: loadAxesStartingAtZero
+        } = chartToLoad.data;
 
-      setChart(loadChart);
-      setTitle(loadTitle);
-      setData(loadData);
-      setDatasets(loadDatasets);
-      setAbsciss(loadAbsciss);
-      setOrderBy(loadOrderBy);
-      setAggregateOperation(loadAggregateOperation);
-      setAxesStartingAtZero(loadAxesStartingAtZero);
+        setChart(loadChart);
+        setTitle(loadTitle);
+        setData(loadData);
+        setDatasets(loadDatasets);
+        setAbsciss(loadAbsciss);
+        setOrderBy(loadOrderBy);
+        setAggregateOperation(loadAggregateOperation);
+        setAxesStartingAtZero(loadAxesStartingAtZero);
+      }
     }
   };
   return (
