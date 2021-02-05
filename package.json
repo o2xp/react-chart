@@ -1,6 +1,6 @@
 {
   "name": "@o2xp/react-chart",
-  "version": "1.0.0-beta.10",
+  "version": "1.0.0-beta.13",
   "description": "",
   "main": "dist/main.js",
   "scripts": {

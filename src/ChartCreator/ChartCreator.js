@@ -70,7 +70,7 @@ const handlePrint = () => {
   window.print();
 };
 
-const ChartCreator = ({ open, setOpen, columns, rows, theme = {} }) => {
+const ChartCreator = ({ open, setOpen, columns, rows, theme = {}, context = "" }) => {
   const [chart, setChart] = useState("");
   const [title, setTitle] = useState(defaultTitle);
   const [showChart, setShowChart] = useState(false);
@@ -100,11 +100,11 @@ const ChartCreator = ({ open, setOpen, columns, rows, theme = {} }) => {
   const [favoritesChartsData, setFavoritesCharts] = useState([]);
 
   useEffect(() => {
-    const savedCharts = JSON.parse(localStorage.getItem(localStorageName));
+    const savedCharts = JSON.parse(localStorage.getItem(`${localStorageName}_${context}`));
     if (savedCharts) {
       setFavoritesCharts(savedCharts);
     }
-  }, []);
+  }, [context]);
 
   useEffect(() => {
     let newCreateDisabled = false;
@@ -263,7 +263,9 @@ const ChartCreator = ({ open, setOpen, columns, rows, theme = {} }) => {
   };
 
   const handleSave = ({ name }) => {
-    const savedCharts = JSON.parse(localStorage.getItem(localStorageName));
+    const savedCharts = JSON.parse(
+      localStorage.getItem(`${localStorageName}_${context}`)
+    );
 
     const newItem = {
       name,
@@ -287,21 +289,31 @@ const ChartCreator = ({ open, setOpen, columns, rows, theme = {} }) => {
       newFavoritesCharts = [newItem];
     }
     setFavoritesCharts(newFavoritesCharts);
-    localStorage.setItem(localStorageName, JSON.stringify(newFavoritesCharts));
+    localStorage.setItem(
+      `${localStorageName}_${context}`,
+      JSON.stringify(newFavoritesCharts)
+    );
   };
 
   const handleDelete = ({ name }) => {
-    const savedCharts = JSON.parse(localStorage.getItem(localStorageName));
+    const savedCharts = JSON.parse(
+      localStorage.getItem(`${localStorageName}_${context}`)
+    );
     const newFavoritesCharts = savedCharts.filter(
       (savedChart) => savedChart.name !== name
     );
 
     setFavoritesCharts(newFavoritesCharts);
-    localStorage.setItem(localStorageName, JSON.stringify(newFavoritesCharts));
+    localStorage.setItem(
+      `${localStorageName}_${context}`,
+      JSON.stringify(newFavoritesCharts)
+    );
   };
 
   const handleLoad = ({ name }) => {
-    const savedCharts = JSON.parse(localStorage.getItem(localStorageName));
+    const savedCharts = JSON.parse(
+      localStorage.getItem(`${localStorageName}_${context}`)
+    );
     if (savedCharts) {
       const chartToLoad = savedCharts.find((savedChart) => savedChart.name === name);
       if (chartToLoad) {
